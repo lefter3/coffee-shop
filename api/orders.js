@@ -1,0 +1,80 @@
+import express from 'express';
+
+import Orders from '../services/orders.js';
+import { CONFLICT, NOT_FOUND, MISSING_DATA } from '../constants/error.js';
+import errorResponse from '../utils/errorResponse.js';
+
+const orders = new Orders();
+
+export const ordersRouter = express.Router();
+
+ordersRouter.get('/', (req, res) => {
+  res.json({
+    availableMethods: [
+      'GET /all',
+      'GET /all?dateFrom&dateTo&page',
+      'GET /:id',
+      'POST',
+      'PUT /:id',
+      'DELETE /:id'
+    ]
+  });
+});
+
+ordersRouter.get('/all', async (req, res) => {
+  // message
+  const searchFilters = req.query;
+  const areFiltersUsed = !!Object.keys(searchFilters).length;
+  if (!areFiltersUsed) {
+    console.log('GET Orders - All available orders');
+  } else {
+    const usedFilters = Object.keys(searchFilters).map(queryKey => ` * ${queryKey}: ${searchFilters[queryKey]}`);
+    console.log(`GET Orders - Used filters: \n${usedFilters.join('\n')}`);
+  }
+  // data
+  try {
+    const foundItems = await orders.getAllOrders(searchFilters);
+    console.log(JSON.stringify(foundItems, undefined, 2));
+    res.json(foundItems);
+  } catch (err) {
+    errorResponse(err, res);
+  }
+});
+
+ordersRouter.get('/:id', async (req, res) => {
+  // message
+  console.log(`GET Order id:${req.params.id}`);
+  // data
+  try {
+    const foundItem = await orders.getOrder(req.params.id);
+    if (foundItem) {
+      console.log(JSON.stringify(foundItem, undefined, 2));
+      res.json(foundItem);
+    } else {
+      throw new Error(NOT_FOUND);
+    }
+  } catch (err) {
+    errorResponse(err, res);
+  }
+});
+
+ordersRouter.post('/', async (req, res) => {
+  // message
+  console.log(`POST Order`);
+  console.log(req.body);
+  // data
+  try {
+    if (!Object.keys(req.body).length) throw new Error(MISSING_DATA);
+    const addResult = await orders.addOrder( { _id: req.params.id , ...req.body } );
+    if (addResult) {
+      console.log('Order added!');
+      res.json({
+        ok: true
+      });
+    } else {
+      throw new Error(CONFLICT);
+    }
+  } catch (err) {
+    errorResponse(err, res);
+  }
+});

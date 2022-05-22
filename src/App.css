@@ -1,0 +1,50 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+input[type="date"] {
+  -webkit-align-items: center;
+  display: -webkit-inline-flex;
+  font-family: monospace;
+  overflow: hidden;
+  padding: 0;
+  -webkit-padding-start: 1px;
+}
+
+input::-webkit-datetime-edit {
+ -webkit-flex: 1;
+ -webkit-user-modify: read-only !important;
+ display: inline-block;
+ min-width: 0;
+ overflow: hidden;
+}
+
+input::-webkit-datetime-edit-fields-wrapper {
+ -webkit-user-modify: read-only !important;
+ display: inline-block;
+ padding: 1px 0;
+ white-space: pre;
+}
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
