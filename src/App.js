@@ -14,7 +14,6 @@ function App() {
         </a>
         <ul class="hidden md:flex px-4 mx-auto font-semibold font-heading space-x-12">
         <li>
-          {/* <Link to="/">Home</Link> */}
         </li>
         </ul>
         

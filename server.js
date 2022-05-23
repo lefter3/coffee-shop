@@ -3,13 +3,12 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const mongoose = require('mongoose');
-const User = require('./models/User');
-const Ticket = require('./models/Tickets')
 var cors = require('cors')
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
-import { mainRouter as apiRouter } from './api';
+const apiRouter = require('./api');
+// import { mainRouter as apiRouter } from './api';
 const io = require('socket.io')(server, {
   cors: {
     origin: '*',
@@ -44,6 +43,6 @@ app.get('/', function (req, res) {
 app.get('/api/home', function(req, res) {
   res.send('Welcome!');
 });
-app.use('/api', apiRouter)(io);
+app.use('/api', apiRouter);
 
 server.listen(process.env.PORT || 8080);

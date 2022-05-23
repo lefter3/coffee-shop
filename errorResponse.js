@@ -1,4 +1,4 @@
-export default (err, res) => {
+(err, res) => {
   switch (err.message) {
     case CONFLICT: {
       const msg = 'Item already exists';

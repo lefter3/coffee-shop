@@ -1,22 +1,21 @@
-import express from 'express';
-
-import { ordersRouter } from './orders.js';
-import { productsRouter } from './products.js';
-import { ingredientsRouter } from './ingredients.js';
+const express = require('express');
+const ordersRouter = require('./orders');
+const productsRouter = require('./products');
+const ingredientsRouter = require('./ingredients');
 
 // Create routers
-export const mainRouter = express.Router();
+const apiRouter = express.Router();
 const groupingRouter = express.Router();
 // Use routers
 groupingRouter.use('/orders', ordersRouter);
 groupingRouter.use('/products', productsRouter);
 groupingRouter.use('/ingredients', ingredientsRouter);
 
-mainRouter.use('/', groupingRouter);
+apiRouter.use('/', groupingRouter);
 
 
 // Main response - available paths info
-mainRouter.get('/', (req, res) => {
+apiRouter.get('/', (req, res) => {
   res.json({
     availablePaths: ['/orders', '/products', '/ingredients']
   });
@@ -24,6 +23,7 @@ mainRouter.get('/', (req, res) => {
 
 
 // Error 404 handling
-mainRouter.use((req, res, next) => {
+apiRouter.use((req, res, next) => {
   res.status(404).send('Page not found');
 });
+module.exports = apiRouter ;

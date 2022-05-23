@@ -1,7 +1,4 @@
-import mongoose from 'mongoose';
-
-import { PAGE_SIZE } from '../constants/db.js';
-import { PRODUCT_NOT_AVAILABLE } from '../constants/error.js';
+const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
   name: {
@@ -24,9 +21,9 @@ const productSchema = new mongoose.Schema({
   }]
 });
 
-export const Product = mongoose.model('Product', productSchema, 'products');
+const Product = mongoose.model('Product', productSchema, 'products');
 
-export const updateProductsAmountDueToOrder = async (productsData) => {
+const updateProductsAmountDueToOrder = async (productsData) => {
   // 'for' loop approach since map/forEach methods did not finish Promises
   const updateResultsArr = [];
   const missingProducts = [];
@@ -64,7 +61,7 @@ export const updateProductsAmountDueToOrder = async (productsData) => {
   }
 };
 
-export const getAllProducts = async () => {
+const getAllProducts = async () => {
 
   
   return await Product
@@ -73,7 +70,7 @@ export const getAllProducts = async () => {
     .exec();
 };
 
-export const getSelectedProductsForOrder = async (productIds) => {
+const getSelectedProductsForOrder = async (productIds) => {
   return await Product
     .find({
       _id: {
@@ -84,20 +81,20 @@ export const getSelectedProductsForOrder = async (productIds) => {
     .exec();
 };
 
-export const getProduct = async (productId) => {
+const getProduct = async (productId) => {
   return await Product
     .findById(productId)
     .lean()
     .exec();
 };
 
-export const addProduct = async (productData) => {
+const addProduct = async (productData) => {
   const productInstance = new Product(productData);
   const result = await productInstance.save();
   return result._id;
 };
 
-export const deleteProduct = async (productId) => {
+const deleteProduct = async (productId) => {
   const result = await Product
     .deleteOne({
       _id: productId

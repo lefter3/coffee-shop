@@ -1,18 +1,15 @@
-import express from 'express';
+const express = require('express');
 
-import Products from '../services/products.js';
-import { CONFLICT, NOT_FOUND, MISSING_DATA } from '../constants/error.js';
-import errorResponse from '../utils/errorResponse.js';
+const Products = require('../services/products.js')
+const errorResponse = require('../errorResponse.js');
 
-const products = new Products();
-
-export const productsRouter = express.Router();
+const productsRouter = express.Router();
 
 productsRouter.get('/', (req, res) => {
   res.json({
     availableMethods: [
       'GET /all',
-      'GET /:id',
+      'GET /delete/:id',
       'POST'
     ]
   });
@@ -30,7 +27,7 @@ productsRouter.get('/all', async (req, res) => {
   }
   // data
   try {
-    const foundItems = await products.getAllProducts(searchFilters);
+    const foundItems = Products.getAllProducts(searchFilters);
     console.log(foundItems);
     res.json(foundItems);
   } catch (err) {
@@ -45,35 +42,36 @@ productsRouter.post('/', async (req, res) => {
   // data
   try {
     if (!Object.keys(req.body).length) throw new Error(MISSING_DATA);
-    const addResult = await products.addProduct( { _id: req.params.id, ...req.body } );
+    const addResult = Products.addProduct( { _id: req.params.id, ...req.body } );
     if (addResult) {
       console.log('Product added!');
       res.json({
         ok: true
       });
     } else {
-      throw new Error(CONFLICT);
+      throw new Error('CONFLICT');
     }
   } catch (err) {
     errorResponse(err, res);
   }
 });
 
-productsRouter.delete('/:id', async (req ,res) => {
+productsRouter.get('/delete/:id', async (req ,res) => {
   // message
   console.log(`DELETE Product id:${req.params.id}`);
   // data
   try {
-    const deleteResult = await products.deleteProduct(req.params.id);
+    const deleteResult = Products.deleteProduct(req.params.id);
     if (deleteResult) {
       console.log('Product deleted!');
       res.json({
         ok: true
       });
     } else {
-      throw new Error(NOT_FOUND);
+      throw new Error('NOT_FOUND');
     }
   } catch (err) {
     errorResponse(err, res);
   }
 });
+module.exports = productsRouter

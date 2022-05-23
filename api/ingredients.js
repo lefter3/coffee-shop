@@ -1,10 +1,8 @@
-import express from 'express';
+const express = require('express');
+const Ingredients = require('../services/ingredients.js');
+const errorResponse = require('../errorResponse.js')
 
-import Ingredients from '../services/ingredients.js';
-
-const ingredients = new Ingredients();
-
-export const ingredientsRouter = express.Router();
+const ingredientsRouter = express.Router();
 
 ingredientsRouter.get('/', (req, res) => {
   res.json({
@@ -16,10 +14,21 @@ ingredientsRouter.get('/', (req, res) => {
 });
 
 ingredientsRouter.get('/all', (req, res) => {
+  try {
     const ingredients = Ingredients.getAllIngredients()
-    res.json(ingredients)
+    res.json(ingredients);
+  } catch (err) {
+    errorResponse(err, res);
+  }
+    
 })
 
 ingredientsRouter.post('/add', (req, res) => {
-    Ingrediets.addOrUpdateIngredient(req.body)
+  try {
+    let ingredient = Ingredients.addOrUpdateIngredient(req.body)
+    res.json(ingredient);
+  } catch (err) {
+    errorResponse(err, res);
+  }
 })
+module.exports = ingredientsRouter

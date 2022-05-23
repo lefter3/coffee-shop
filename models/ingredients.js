@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Ingredient = new Schema({
+const Ingredient = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
   units: { type: Number, required: true },
   unitType: { type: String, required: false },
@@ -7,11 +7,13 @@ const Ingredient = new Schema({
 
 module.exports = mongoose.model('Ingredient', Ingredient);
 
-export const getAllIngredients = async () => {
-  return await Order.find().exec();
+const getAllIngredients = async () => {
+  return await Order.find().lean().exec();
 };
-
-export const addOrUpdateIngredient = async () => {
+updateInventoryAmountDueToOrder = async () => {
+  
+}
+const addOrUpdateIngredient = async () => {
   
   var query = {'name': req.body.name};
 

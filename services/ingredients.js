@@ -1,18 +1,15 @@
-import {
-  getAllIngredients as dbGetAllIngredients,
-  addOrUpdateIngredient as dbAddIngredient,
-} from '../models/ingredients.js';
+const Ingredients = require( '../models/ingredients.js')
 
-export default class Ingredient {
+class Ingredient {
   async getAllIngredients() {
     // db connection
-    return await dbGetAllIngredients();
+    return await Ingredients.getAllIngredients();
   }
 
   async addIngredient(ingredient) {
     try {
       // validation & db connection
-      return await dbAddIngredient(ingredient);
+      return await Ingredients.addIngredient(ingredient);
     } catch (err) {
       const error = new Error();
       error.reason = err.message;
