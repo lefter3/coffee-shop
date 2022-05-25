@@ -61,7 +61,7 @@ const updateProductsAmountDueToOrder = async (productsData) => {
   }
 };
 
-const getAllProducts = async () => {
+const getAll = async () => {
 
   
   return await Product
@@ -88,13 +88,13 @@ const getProduct = async (productId) => {
     .exec();
 };
 
-const addProduct = async (productData) => {
+const add = async (productData) => {
   const productInstance = new Product(productData);
   const result = await productInstance.save();
   return result._id;
 };
 
-const deleteProduct = async (productId) => {
+const deleteOne = async (productId) => {
   const result = await Product
     .deleteOne({
       _id: productId
@@ -102,3 +102,4 @@ const deleteProduct = async (productId) => {
     .exec();
   return result.deletedCount;
 };
+module.exports = {getAll, deleteOne, add}

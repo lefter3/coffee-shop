@@ -1,6 +1,6 @@
 const express = require('express');
-const Ingredients = require('../services/ingredients.js');
-const errorResponse = require('../errorResponse.js')
+const {getAll, addIngredient} = require('../services/ingredients.js');
+const {errorResponse} = require('../errorResponse.js')
 
 const ingredientsRouter = express.Router();
 
@@ -13,20 +13,20 @@ ingredientsRouter.get('/', (req, res) => {
   });
 });
 
-ingredientsRouter.get('/all', (req, res) => {
+ingredientsRouter.get('/all', async (req, res) => {
   try {
-    const ingredients = Ingredients.getAllIngredients()
+    const ingredients = await getAll()
     res.json(ingredients);
   } catch (err) {
     errorResponse(err, res);
   }
-    
 })
 
-ingredientsRouter.post('/add', (req, res) => {
+ingredientsRouter.post('/add', async (req, res) => {
+  const ingredient = req.body
   try {
-    let ingredient = Ingredients.addOrUpdateIngredient(req.body)
-    res.json(ingredient);
+    let result = await addIngredient(ingredient);
+    res.json(result);
   } catch (err) {
     errorResponse(err, res);
   }

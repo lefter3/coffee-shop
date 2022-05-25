@@ -1,19 +1,11 @@
-const Ingredients = require( '../models/ingredients.js')
+const {getAllIngredients, addOrUpdateIngredient} = require( '../models/ingredients.js')
 
-class Ingredient {
-  async getAllIngredients() {
-    // db connection
-    return await Ingredients.getAllIngredients();
+  const getAll = async () => {
+    return await getAllIngredients();
   }
 
-  async addIngredient(ingredient) {
-    try {
-      // validation & db connection
-      return await Ingredients.addIngredient(ingredient);
-    } catch (err) {
-      const error = new Error();
-      error.reason = err.message;
-      throw error;
-    }
+  const addIngredient = async (ingredient) => {
+      return await addOrUpdateIngredient(ingredient);
   }
-}
+
+module.exports = {getAll, addIngredient}

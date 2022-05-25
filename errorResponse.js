@@ -1,6 +1,7 @@
-(err, res) => {
+errorResponse = function (err, res) {
+  console.log(err)
   switch (err.message) {
-    case CONFLICT: {
+    case 'CONFLICT': {
       const msg = 'Item already exists';
       console.log(msg);
       return res.status(409).send(msg);
@@ -27,3 +28,5 @@
     }
   }
 };
+
+module.exports = {errorResponse}

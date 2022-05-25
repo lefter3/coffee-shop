@@ -24,7 +24,7 @@ const orderSchema = new mongoose.Schema({
 const Order = mongoose.model('Order', orderSchema, 'orders');
 
 const getAllOrders = async () => {
-  return await Order.find().exec();
+  return await Order.find().lean().exec();
 };
 
 const getOrder = async (orderId) => {
@@ -43,3 +43,4 @@ const addOrder = async (orderData) => {
   const result = await orderInstance.save();
   return result._id;
 };
+module.exports = {getAllOrders, addOrder}

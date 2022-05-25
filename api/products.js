@@ -1,7 +1,8 @@
 const express = require('express');
 
-const Products = require('../services/products.js')
-const errorResponse = require('../errorResponse.js');
+const {addProduct, getAllProducts, deleteProduct} = require('../services/products.js');
+
+const {errorResponse} = require('../errorResponse.js');
 
 const productsRouter = express.Router();
 
@@ -27,7 +28,7 @@ productsRouter.get('/all', async (req, res) => {
   }
   // data
   try {
-    const foundItems = Products.getAllProducts(searchFilters);
+    const foundItems = await getAllProducts(searchFilters);
     console.log(foundItems);
     res.json(foundItems);
   } catch (err) {
@@ -41,8 +42,8 @@ productsRouter.post('/', async (req, res) => {
   console.log(req.body);
   // data
   try {
-    if (!Object.keys(req.body).length) throw new Error(MISSING_DATA);
-    const addResult = Products.addProduct( { _id: req.params.id, ...req.body } );
+    if (!Object.keys(req.body).length) throw new Error('MISSING_DATA');
+    const addResult = addProduct( { _id: req.params.id, ...req.body } );
     if (addResult) {
       console.log('Product added!');
       res.json({
@@ -61,7 +62,7 @@ productsRouter.get('/delete/:id', async (req ,res) => {
   console.log(`DELETE Product id:${req.params.id}`);
   // data
   try {
-    const deleteResult = Products.deleteProduct(req.params.id);
+    const deleteResult = deleteProduct(req.params.id);
     if (deleteResult) {
       console.log('Product deleted!');
       res.json({

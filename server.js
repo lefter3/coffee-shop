@@ -8,7 +8,6 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 const apiRouter = require('./api');
-// import { mainRouter as apiRouter } from './api';
 const io = require('socket.io')(server, {
   cors: {
     origin: '*',
@@ -36,9 +35,9 @@ io.on('connection', (socket) => { /* socket object may be used to send specific 
   console.log('new client connected');
 });
 
-app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
+// app.get('/', function (req, res) {
+//   res.sendFile(path.join(__dirname, 'public', 'index.html'));
+// });
 
 app.get('/api/home', function(req, res) {
   res.send('Welcome!');

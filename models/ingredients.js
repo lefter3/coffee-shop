@@ -1,24 +1,25 @@
 const mongoose = require('mongoose');
-const Ingredient = new mongoose.Schema({
+const ingredientScheema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
   units: { type: Number, required: true },
   unitType: { type: String, required: false },
 });
 
-module.exports = mongoose.model('Ingredient', Ingredient);
+const Ingredient = mongoose.model('Ingredient', ingredientScheema, 'ingredients');
 
 const getAllIngredients = async () => {
-  return await Order.find().lean().exec();
+  return await Ingredient.find().lean().exec();
 };
 updateInventoryAmountDueToOrder = async () => {
   
 }
-const addOrUpdateIngredient = async () => {
-  
-  var query = {'name': req.body.name};
+const addOrUpdateIngredient = async (ingredient) => {
+  var query = {'name': ingredient.name};
 
-  MyModel.findOneAndUpdate(query, req.body, {upsert: true}, function(err, doc) {
+  Ingredient.findOneAndUpdate(query, ingredient, {upsert: true}, function(err, doc) {
       if (err) return res.send(500, {error: err});
-      return res.send(doc);
+      return doc;
   });
 };
+
+module.exports = {getAllIngredients, addOrUpdateIngredient}
