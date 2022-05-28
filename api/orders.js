@@ -1,6 +1,6 @@
 const express = require('express');
 const Orders = require('../services/orders');
-const errorResponse = require('../errorResponse.js')
+const errorResponse = require('../utils/errorResponse.js')
 
 const ordersRouter = express.Router();
 

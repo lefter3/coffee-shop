@@ -1,6 +1,6 @@
 const express = require('express');
 const {getAll, addIngredient} = require('../services/ingredients.js');
-const {errorResponse} = require('../errorResponse.js')
+const errorResponse = require('../utils/errorResponse.js')
 
 const ingredientsRouter = express.Router();
 
@@ -25,7 +25,8 @@ ingredientsRouter.get('/all', async (req, res) => {
 ingredientsRouter.post('/add', async (req, res) => {
   const ingredient = req.body
   try {
-    let result = await addIngredient(ingredient);
+    let result =  await addIngredient(ingredient);
+    // console.log('result/????',result)
     res.json(result);
   } catch (err) {
     errorResponse(err, res);

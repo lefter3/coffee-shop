@@ -2,7 +2,7 @@ const express = require('express');
 
 const {addProduct, getAllProducts, deleteProduct} = require('../services/products.js');
 
-const {errorResponse} = require('../errorResponse.js');
+const {errorResponse} = require('../utils/errorResponse.js');
 
 const productsRouter = express.Router();
 
@@ -44,6 +44,7 @@ productsRouter.post('/', async (req, res) => {
   try {
     if (!Object.keys(req.body).length) throw new Error('MISSING_DATA');
     const addResult = addProduct( { _id: req.params.id, ...req.body } );
+    console.log(addResult)
     if (addResult) {
       console.log('Product added!');
       res.json({

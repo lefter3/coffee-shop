@@ -7,18 +7,14 @@ const productSchema = new mongoose.Schema({
   },
   expirationDate: {
     type: Date,
-    required: true
+    required: false
   },
   category: {
     type: [String],
     required: true,
-    enum: ['coffee', 'food', 'tea', 'dessert']
+    enum: ['drinks', 'food', 'dessert']
   },
-  ingredients: [{
-    ingredient: {type: mongoose.Schema.Types.ObjectId, ref: 'Ingredient'},
-    qnt: {type: Number, required: false},
-    quantityType: {type: String, required: false}
-  }]
+  ingredients: [{type: mongoose.Schema.Types.ObjectId, ref: 'Ingredient'}]
 });
 
 const Product = mongoose.model('Product', productSchema, 'products');
@@ -62,11 +58,9 @@ const updateProductsAmountDueToOrder = async (productsData) => {
 };
 
 const getAll = async () => {
-
-  
   return await Product
     .find()
-    .populate('ingrdients.ingredient')
+    .populate('ingrdients')
     .exec();
 };
 
@@ -89,9 +83,10 @@ const getProduct = async (productId) => {
 };
 
 const add = async (productData) => {
+  productData.ingredients = productData.ingredients.map(el => mongoose.Types.ObjectId(el))
   const productInstance = new Product(productData);
   const result = await productInstance.save();
-  return result._id;
+  return result;
 };
 
 const deleteOne = async (productId) => {
