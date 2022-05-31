@@ -10,10 +10,11 @@ const productSchema = new mongoose.Schema({
     required: false
   },
   category: {
-    type: [String],
+    type: String,
     required: true,
     enum: ['drinks', 'food', 'dessert']
   },
+  price: {type: Number}, 
   ingredients: [{type: mongoose.Schema.Types.ObjectId, ref: 'Ingredient'}]
 });
 
@@ -60,25 +61,37 @@ const updateProductsAmountDueToOrder = async (productsData) => {
 const getAll = async () => {
   return await Product
     .find()
-    .populate('ingrdients')
+    .populate('ingredients')
+    .lean()
     .exec();
 };
 
-const getSelectedProductsForOrder = async (productIds) => {
-  return await Product
-    .find({
-      _id: {
-        '$in': productIds
-      }
+const isAvailable = async (productId, orderAmount) => {
+  let product = await getProduct(productId)
+  return new Promise((resolve, reject) => {
+    product.ingredients.forEach(ingredient=> {
+      if (ingredient.amount < orderAmount) reject(false)
     })
-    .lean()
-    .exec();
+    resolve(product)
+  })
+};
+
+const getSelectedProductsForOrder = async (order) => {
+  console.log(getSelectedProductsForOrder)
+  let productIds = Object.keys(order)
+  let promises = []
+  productIds.forEach(id=>{
+    promises.push(isAvailable(id, order[id].amount))
+  })
+  Promise.allSettled(promises).then(result => {
+    console.log(result)
+  })
 };
 
 const getProduct = async (productId) => {
   return await Product
     .findById(productId)
-    .lean()
+    .populate('ingredients')
     .exec();
 };
 
@@ -97,4 +110,4 @@ const deleteOne = async (productId) => {
     .exec();
   return result.deletedCount;
 };
-module.exports = {getAll, deleteOne, add}
+module.exports = {getAll, deleteOne, add, getSelectedProductsForOrder}

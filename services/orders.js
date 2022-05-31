@@ -1,25 +1,18 @@
 const {getAllOrders, addOrder} = require('../models/orders.js')
-const {updateInventoryAmountDueToOrder} = require('../models/ingredients.js');
+const {getSelectedProductsForOrder} = require('../models/products.js');
 
   const getAll = async (searchFilters) => {
     return await getAllOrders(searchFilters);
   }
 
-  const constaddOrders = async (orderData) => {
+  const addOrders = async (orderData) => {
     try {
-      // update the 'ingredients' collection
-      const productsWithAmountToSubtract = orderData.products.map(product => ({
-        ...product,
-        amount: product.amount * (-1)
-      }));
-      //TODO Promise.all()
-      await updateInventoryAmountDueToOrder(productsWithAmountToSubtract);
+      getSelectedProductsForOrder(orderData)
+
       return await addOrder(orderData);
     } catch (err) {
-      const error = new Error('VALIDATION_ERROR');
-      error.reason = err.message;
-      throw error;
+      throw err;
     }
   }
 
-module.exports = {getAll, addOrder}
+module.exports = {getAll, addOrders}

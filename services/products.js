@@ -1,18 +1,18 @@
 const {getAll, add, deleteOne} = require('../models/products.js')
 
-  const getAllProducts = async (searchFilters) => {
+  const getAllProducts = async () => {
     // db connection
-    return await getAll(searchFilters);
+    return await getAll();
   }
   
   const addProduct = async (productData) => {
     try {
       // validation & db connection
+      delete productData._id
       return await add(productData);
     } catch (err) {
-      const error = new Error('VALIDATION_ERROR');
-      error.reason = err.message;
-      throw error;
+      // error.reason = err.message;
+      throw err;
     }
   }
 

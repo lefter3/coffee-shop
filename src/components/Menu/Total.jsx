@@ -1,20 +1,24 @@
 import React, { useContext } from "react";
 import { Context } from "./Context";
-import data from "../data";
 
 export default function Total() {
-  const [items] = useContext(Context);
-
-  const totalPrice = Object.keys(items).reduce((acc, curr) => {
-    const [group, item] = curr.split("-");
-    const amount = items[curr] * data[group][item].price;
-    return acc + amount;
-  }, 0);
-
+  const [items, updateItems, placeOrder] = useContext(Context);
+  // console.log(items)
+  let products = Object.keys(items)
+  let totalPrice = 0
+  products.forEach(product => {
+    totalPrice += items[product].price * items[product].amount
+  })
   return (
     <div className="total">
       <span className="total-title">Total:</span>
       <span className="total-price">${totalPrice}</span>
+      <div className="w-full">
+      <button
+        className="submit text-white font-bold py-2 px-4 rounded-full justify-center"
+        onClick={(e) => placeOrder()}
+      >Save</button>
+    </div>
     </div>
   );
 }

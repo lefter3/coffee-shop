@@ -15,6 +15,8 @@ export default function Products() {
   });
   const [product, setProduct] = useState({
     name: "",
+    category: '',
+    price: 0,
     ingredients: [],
   });
 
@@ -32,7 +34,6 @@ export default function Products() {
     setIngredient({ ...ingredient, [event.target.name]: event.target.value.toLowerCase() });
   };
   const handleProductChange = (event) => {
-    console.log(event)
     if (event.target) setProduct({ ...product, [event.target.name]: event.target.value.toLowerCase() });
     // react select workaround
     else if (event.value) setProduct({ ...product, 'category': event.value.toLowerCase() });
@@ -65,18 +66,16 @@ export default function Products() {
   };
   const handleProductSubmit = async (event) => {
     event.preventDefault();
-    console.log(product)
     try {
       sendData('/api/products/', product)
       .then(res => res.json())
       .then((res) => {
         if (res.ok){
           alert('Product added')
-          setProduct({ name: "", category: "", ingredients: [] });
+          setProduct({ name: "", category: null, ingredients: null, price: 0 });
         }
         
       }); 
-      setProduct({ name: "", ingredints: [], category: '' });
     } catch (err) {
       alert(err)
     }
@@ -103,12 +102,31 @@ export default function Products() {
           onChange={handleProductChange}
           />
       </div>
-      <div class="form-group mb-6">
+      <div class="form-group mb-6 grid grid-cols-2">
+        <div class="p-3">
         <label class="form-label inline-block mb-2 text-gray-700">Category</label>
           <Select
-          name="category"
-          onChange={handleProductChange}
-          options={categories} />
+            name="category"
+            onChange={handleProductChange}
+            options={categories} />
+        </div>
+        <div class="p-3">
+          <label class="form-label inline-block mb-2 text-gray-700">Price</label>
+          <input type="text" inputmode="numeric" pattern="[0-9]*" name="price" class="form-control block w-full px-3 py-1.5
+            text-base
+            font-normal  
+            text-gray-700
+            bg-white bg-clip-padding
+            border border-solid border-gray-300
+            rounded
+            transition
+            ease-in-out
+            m-0
+            focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            value={product.price}
+            onChange={handleProductChange}
+          />
+        </div>  
       </div>
       <div class="form-group mb-6">
         <label class="form-label inline-block mb-2 text-gray-700">Ingredients</label>

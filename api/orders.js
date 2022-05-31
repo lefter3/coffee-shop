@@ -1,6 +1,6 @@
 const express = require('express');
-const Orders = require('../services/orders');
-const errorResponse = require('../utils/errorResponse.js')
+const {addOrders, getAll} = require('../services/orders.js');
+const {errorResponse} = require('../utils/errorResponse.js')
 
 const ordersRouter = express.Router();
 
@@ -15,18 +15,8 @@ ordersRouter.get('/', (req, res) => {
 });
 
 ordersRouter.get('/all', async (req, res) => {
-  // message
-  const searchFilters = req.query;
-  const areFiltersUsed = !!Object.keys(searchFilters).length;
-  if (!areFiltersUsed) {
-    console.log('GET Orders - All available orders');
-  } else {
-    const usedFilters = Object.keys(searchFilters).map(queryKey => ` * ${queryKey}: ${searchFilters[queryKey]}`);
-    console.log(`GET Orders - Used filters: \n${usedFilters.join('\n')}`);
-  }
-  // data
   try {
-    const foundItems = orders.getAllOrders(searchFilters);
+    const foundItems = getAll();
     console.log(JSON.stringify(foundItems, undefined, 2));
     res.json(foundItems);
   } catch (err) {
@@ -34,22 +24,22 @@ ordersRouter.get('/all', async (req, res) => {
   }
 });
 
-ordersRouter.get('/:id', async (req, res) => {
-  // message
-  console.log(`GET Order id:${req.params.id}`);
-  // data
-  try {
-    const foundItem = await orders.getOrder(req.params.id);
-    if (foundItem) {
-      console.log(JSON.stringify(foundItem, undefined, 2));
-      res.json(foundItem);
-    } else {
-      throw new Error('NOT_FOUND');
-    }
-  } catch (err) {
-    errorResponse(err, res);
-  }
-});
+// ordersRouter.get('/:id', async (req, res) => {
+//   // message
+//   console.log(`GET Order id:${req.params.id}`);
+//   // data
+//   try {
+//     const foundItem = await getOrder(req.params.id);
+//     if (foundItem) {
+//       console.log(JSON.stringify(foundItem, undefined, 2));
+//       res.json(foundItem);
+//     } else {
+//       throw new Error('NOT_FOUND');
+//     }
+//   } catch (err) {
+//     errorResponse(err, res);
+//   }
+// });
 
 ordersRouter.post('/', async (req, res) => {
   // message
@@ -57,8 +47,8 @@ ordersRouter.post('/', async (req, res) => {
   console.log(req.body);
   // data
   try {
-    if (!Object.keys(req.body).length) throw new Error(MISSING_DATA);
-    const addResult = orders.addOrder( { _id: req.params.id , ...req.body } );
+    if (!Object.keys(req.body).length) throw new Error('MISSING_DATA');
+    const addResult = addOrders(req.body );
     if (addResult) {
       console.log('Order added!');
       res.json({

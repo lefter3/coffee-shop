@@ -27,6 +27,10 @@ body {
     sans-serif, Apple Color Emoji, Segoe UI Emoji;
 }
 
+.submit {
+  background-color: var(--primary);
+}
+
 .menu-input {
   width: 1.75rem;
   height: 1.75rem;
