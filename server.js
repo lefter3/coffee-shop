@@ -8,11 +8,6 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 const apiRouter = require('./api');
-const io = require('socket.io')(server, {
-  cors: {
-    origin: '*',
-  }
-});
 
 app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -29,15 +24,6 @@ mongoose.connect(mongo_uri, { useNewUrlParser: true, useUnifiedTopology: true },
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
-
-io.on('connection', (socket) => { /* socket object may be used to send specific messages to the new connected client */
-
-  console.log('new client connected');
-});
-
-// app.get('/', function (req, res) {
-//   res.sendFile(path.join(__dirname, 'public', 'index.html'));
-// });
 
 app.get('/api/home', function(req, res) {
   res.send('Welcome!');

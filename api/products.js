@@ -10,7 +10,7 @@ productsRouter.get('/', (req, res) => {
   res.json({
     availableMethods: [
       'GET /all',
-      'GET /delete/:id',
+      'GET /delete/:name',
       'POST'
     ]
   });
@@ -42,9 +42,9 @@ productsRouter.post('/', async (req, res) => {
   }
 });
 
-productsRouter.get('/delete/:id', async (req ,res) => {
+productsRouter.get('/delete/:name', async (req ,res) => {
   try {
-    const deleteResult = deleteProduct(req.params.id);
+    const deleteResult = deleteProduct(req.params.name);
     if (deleteResult) {
       console.log('Product deleted!');
       res.json({

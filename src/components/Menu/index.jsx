@@ -3,12 +3,10 @@ import Foods from "./Foods";
 import Extras from "./Extras";
 import Total from "./Total";
 import { Provider } from "./Context";
+const SERVER = "http://127.0.0.1:8080";
 
 export default function Menu() {
-  const [menuItems, setMenuItems] = useState([])
   const [products, setProducts] = useState({})
-  const [ingredients, setIngredients] = useState([])
-
   const addItemToMenu = (item) => {
     for (let i=0; i < item.ingredients.length;  i++) {
       if (item.ingredients[i].amount == 0) {
@@ -28,23 +26,23 @@ export default function Menu() {
     {},
   );
   const updateMenuItems = (items) => {
-    console.log(items)
     let productsInStock = items.filter(el => addItemToMenu(el))
     let menuItems = productsInStock.length ? groupBy(productsInStock, 'category') : []
     setProducts(menuItems)
   }
-  useEffect(() => {
+  const getAllProducts = () => {
     fetch('/api/products/all')
     .then(res => res.json())
     .then(res => {
-      setMenuItems(res)
       updateMenuItems(res)
     })
-    fetch('/api/ingredients/all')
-    .then(res => res.json())
-    .then(res => {
-      setIngredients(res)
-    })
+  }
+  useEffect(() => {
+    getAllProducts()
+    var socket = socketClient (SERVER);
+    socket.on('connection', () => {
+        console.log(`connected`);
+    });
   }, [])
   return (
     <Provider>
@@ -53,7 +51,7 @@ export default function Menu() {
         <aside className="aside">
 
           <Extras type="Drinks" items={products.drinks} />
-          <Extras type="Deserts" items={products.desert} />
+          <Extras type="Deserts" items={products.dessert} />
         </aside>
         <Total />
       </div>

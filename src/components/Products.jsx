@@ -112,7 +112,7 @@ export default function Products() {
         </div>
         <div class="p-3">
           <label class="form-label inline-block mb-2 text-gray-700">Price</label>
-          <input type="text" inputmode="numeric" pattern="[0-9]*" name="price" class="form-control block w-full px-3 py-1.5
+          <input type="text" inputMode="numeric" pattern="[0-9]*" name="price" class="form-control block w-full px-3 py-1.5
             text-base
             font-normal  
             text-gray-700

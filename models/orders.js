@@ -21,10 +21,10 @@ const orderSchema = new mongoose.Schema({
   }
 });
 
-const Order = mongoose.model('Order', orderSchema, 'orders');
+const Order = mongoose.model('Order', orderSchema);
 
 const getAllOrders = async () => {
-  return await Order.find().lean().exec();
+  return await Order.find().populate('products.id').exec();
 };
 
 const getOrder = async (orderId) => {
@@ -35,12 +35,8 @@ const getOrder = async (orderId) => {
 };
 
 const addOrder = async (orderData) => {
-  // preparing field 'total' for orderData 
-  const total = orderData.products.reduce((prev, curr) => prev + (curr.amount * curr.unitPrice), 0);
-  const orderDataWithTotal = { ...orderData, total };
-
-  const orderInstance = await new Order(orderDataWithTotal);
+  const orderInstance = await new Order(orderData);
   const result = await orderInstance.save();
-  return result._id;
+  return result;
 };
 module.exports = {getAllOrders, addOrder}

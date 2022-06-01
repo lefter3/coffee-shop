@@ -8,7 +8,7 @@ export default function Input({ name, price }) {
     <input
       className="menu-input"
       type="text"
-      inputmode="numeric"
+      inputMode="numeric"
       pattern="[0-9]*"
       onChange={({ target }) => updateItem(name, target.value, price)}
       name={name}

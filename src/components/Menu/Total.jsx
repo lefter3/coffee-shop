@@ -15,7 +15,7 @@ export default function Total() {
       <span className="total-price">${totalPrice}</span>
       <div className="w-full">
       <button
-        className="submit text-white font-bold py-2 px-4 rounded-full justify-center"
+        className="submit text-white font-bold py-2 px-4 rounded-full float-right"
         onClick={(e) => placeOrder()}
       >Save</button>
     </div>

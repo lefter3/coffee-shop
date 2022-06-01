@@ -16,8 +16,8 @@ errorResponse = function (err, res) {
       console.log(msg);
       return res.status(400).send(msg);
     }
-    case 'PEER_ERROR': {
-      const msg = 'Missing related peer resource (product or staff)';  
+    case 'INVENTORY': {
+      const msg = 'Missing Inventory';  
       console.log(msg);
       return res.status(409).send(msg);
     }

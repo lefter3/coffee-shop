@@ -2,7 +2,6 @@ import React from "react";
 import Input from "./Input";
 
 export default function Foods({ foods }) {
-  console.log('food', foods)
   if (!foods || !foods.length) return (<h2 className="extras-heading">Foods</h2>)
   foods = foods.map(food => ({...food, description: food.ingredients.map(el =>el.name.charAt(0).toUpperCase() + el.name.slice(1)).join(', ')}))
   return (

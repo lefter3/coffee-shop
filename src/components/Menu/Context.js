@@ -15,9 +15,8 @@ export const Provider = props => {
     let products = Object.keys(items)
     let order = {}//products.map(el => ({[el]: items[el].amount}))
     products.forEach(product => {
-      order[product] = items[product].amount
+      if (items[product].amount) order[product] = items[product].amount
     })
-    console.log(order)
     return fetch('/api/orders/', {
       method: 'POST',
       headers: {

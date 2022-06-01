@@ -16,10 +16,10 @@ const {getAll, add, deleteOne} = require('../models/products.js')
     }
   }
 
-  const deleteProduct = async (productId) => {
+  const deleteProduct = async (name) => {
     try {
       // validation & db connection
-      return await deleteOne(productId);
+      return await deleteOne(name);
     } catch (err) {
       const error = new Error('VALIDATION_ERROR');
       error.reason = err.message;
