@@ -24,7 +24,7 @@ const orderSchema = new mongoose.Schema({
 const Order = mongoose.model('Order', orderSchema);
 
 const getAllOrders = async () => {
-  return await Order.find().populate('products.id').exec();
+  return await Order.find().exec();
 };
 
 const getOrder = async (orderId) => {

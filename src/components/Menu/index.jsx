@@ -3,13 +3,12 @@ import Foods from "./Foods";
 import Extras from "./Extras";
 import Total from "./Total";
 import { Provider } from "./Context";
-const SERVER = "http://127.0.0.1:8080";
 
 export default function Menu() {
   const [products, setProducts] = useState({})
   const addItemToMenu = (item) => {
     for (let i=0; i < item.ingredients.length;  i++) {
-      if (item.ingredients[i].amount == 0) {
+      if (item.ingredients[i].amount <= 0) {
         return false
       }
     }
@@ -39,10 +38,6 @@ export default function Menu() {
   }
   useEffect(() => {
     getAllProducts()
-    var socket = socketClient (SERVER);
-    socket.on('connection', () => {
-        console.log(`connected`);
-    });
   }, [])
   return (
     <Provider>

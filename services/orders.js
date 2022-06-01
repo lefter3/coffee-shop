@@ -1,6 +1,7 @@
 const {getAllOrders, addOrder} = require('../models/orders.js')
 const {productIsAvailable, getOrderTotal} = require('../models/products.js');
 const {updateIngredient} = require('../models/ingredients.js');
+const { errorResponse } = require('../utils/errorResponse.js');
 
   const getAll = async (searchFilters) => {
     return await getAllOrders(searchFilters);
@@ -10,7 +11,7 @@ const {updateIngredient} = require('../models/ingredients.js');
     let productIds = Object.keys(order)
     let promises = []
     productIds.forEach(id=>{
-      promises.push(productIsAvailable(id, order[id].amount))
+      promises.push(productIsAvailable(id, order[id]))
     })
     return await Promise.all(promises)
   }; 
@@ -36,6 +37,7 @@ const {updateIngredient} = require('../models/ingredients.js');
     try {
       // Get Products && check for inventory
       let result = await getSelectedProductsForOrder(orderData)
+      console.log(result[0].ingredients)
       if (result == false) throw new Error('INVENTORY')
       let total = await getOrderTotal(orderData)
       let order = {
@@ -49,7 +51,7 @@ const {updateIngredient} = require('../models/ingredients.js');
         return updateIngredientsForAllOrder(orderData, result)
       });
     } catch (err) {
-      throw err;
+      errorResponse(err);
     }
   }
 

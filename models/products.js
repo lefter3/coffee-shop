@@ -29,6 +29,7 @@ const getAll = async () => {
 };
 
 const productIsAvailable = async (productId, orderAmount) => {
+  console.log(orderAmount)
   let product = await getProduct(productId)
   return new Promise((resolve, reject) => {
     product.ingredients.forEach(ingredient=> {
